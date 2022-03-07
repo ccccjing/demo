@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>雪花效果</title>
+        <!-- <script src="lib.js"></script> -->
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+    
+            body {
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <script>
+            window.onload = function () {
+
+                /* 1.Canvas构造函数 */
+                function Canvas(w, h) {
+                    this.width = w;
+                    this.height = h;
+                }
+    
+                // 添加方法
+                Canvas.prototype = {
+                    init: function () {
+                        const oC = document.createElement("canvas");
+                        oC.setAttribute('width', this.width);
+                        oC.setAttribute('height', this.height);
+                        oC.setAttribute('id', 'canvas');
+                        oC.style.backgroundColor = '#000';
+                        document.body.appendChild(oC);
+                    }
+                }
+    
+                // 获取当前浏览器宽高
+                let curWinWidth = window.innerWidth,
+                    curWinHeight = window.innerHeight;
+
+                // 创建并实例化一个canvasd对象
+                const oCanvas = new Canvas(curWinWidth, curWinHeight);
+
+                // canvas初始化
+                oCanvas.init();
+                
+                // 获取canvas
+                const oC = document.querySelector('#canvas');
+
+                // 获取宽高，2D对象
+                var width = oC.width, height = oC.height, oGc = oC.getContext('2d');
+
+                console.log(oGc)
+                
+                // 随机值函数
+                function random(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+
+
+                /* 2.雪的构造函数 */
+                function Snow() {
+    
+                }
+
+                // 添加方法
+                Snow.prototype = {
+                    // 初始化
+                    init: function () {
+                        this.x = random(0, width);
+                        this.y = 100;
+                        // this.r = random(1, 5);
+                        this.lineWidth = random(1, 2),
+                        this.r = random(18, 23); 
+                        this.vy = random(3, 5);
+                    },
+
+                    // 画雪花
+                    draw: function (cxt) {
+                        cxt.beginPath();
+                        cxt.lineWidth = this.lineWidth
+                        cxt.strokeStyle = '#fff';
+                        cxt.fillStyle = '#fff';
+
+                        /* 上主干 */
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x,this.y)
+                        cxt.lineTo(this.x,this.y + this.r)
+                        cxt.stroke()
+                        //画顶端圆
+                        cxt.beginPath();
+                        cxt.arc(this.x, this.y + this.r, this.lineWidth * 1.3, 0, Math.PI * 2, true);
+                        cxt.fill();
+                        // 画分支1
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x,this.y + this.r * 0.6)
+                        cxt.lineTo(this.x + this.r * 0.4,this.y + this.r * 0.8)
+                        cxt.stroke()
+                        // 画分支2
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x,this.y + this.r * 0.6)
+                        cxt.lineTo(this.x - this.r * 0.4,this.y + this.r * 0.8)
+                        cxt.stroke()
+
+                        /* 下主干 */
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x,this.y)
+                        cxt.lineTo(this.x,this.y - this.r)
+                        cxt.stroke()
+                        //画顶端圆
+                        cxt.beginPath();
+                        cxt.arc(this.x, this.y - this.r, this.lineWidth * 1.3, 0, Math.PI * 2, true);
+                        cxt.fill();
+                        // 画分支1
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x,this.y - this.r * 0.6)
+                        cxt.lineTo(this.x + this.r * 0.4,this.y - this.r * 0.8)
+                        cxt.stroke()
+                        // 画分支2
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x,this.y - this.r * 0.6)
+                        cxt.lineTo(this.x - this.r * 0.4,this.y - this.r * 0.8)
+                        cxt.stroke()
+
+                        
+                        /* 右下主干 */
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x,this.y)
+                        cxt.lineTo(this.x + this.r, this.y + this.r * 0.5)
+                        cxt.stroke()
+                        //画顶端圆
+                        cxt.beginPath();
+                        cxt.arc(this.x + this.r, this.y + this.r * 0.5, this.lineWidth * 1.3, 0, Math.PI * 2, true);
+                        cxt.fill();
+                        // 画分支1
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x + this.r * 0.6,this.y + this.r * 0.3)
+                        cxt.lineTo(this.x + this.r * 0.6,this.y + this.r * 0.8)
+                        cxt.stroke()
+                        // 画分支2
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x + this.r * 0.6,this.y + this.r * 0.3)
+                        cxt.lineTo(this.x + this.r,this.y + this.r * 0.1)
+                        cxt.stroke()
+
+                        
+                        /* 左下主干 */
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x,this.y)
+                        cxt.lineTo(this.x - this.r, this.y + this.r * 0.5)
+                        cxt.stroke()
+                        //画顶端圆
+                        cxt.beginPath();
+                        cxt.arc(this.x - this.r, this.y + this.r * 0.5, this.lineWidth * 1.3, 0, Math.PI * 2, true);
+                        cxt.fill();
+                        // 画分支1
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x - this.r * 0.6, this.y + this.r * 0.3)
+                        cxt.lineTo(this.x - this.r * 0.6,this.y + this.r * 0.8)
+                        cxt.stroke()
+                        // 画分支2
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x - this.r * 0.6, this.y + this.r * 0.3)
+                        cxt.lineTo(this.x - this.r,this.y + this.r * 0.1)
+                        cxt.stroke()
+
+                        
+                        /* 右上主干 */
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x,this.y)
+                        cxt.lineTo(this.x + this.r, this.y - this.r * 0.5)
+                        cxt.stroke()
+                        //画顶端圆
+                        cxt.beginPath()
+                        cxt.arc(this.x + this.r, this.y - this.r * 0.5, this.lineWidth * 1.3, 0, Math.PI * 2, true);
+                        cxt.fill()
+                        // 画分支1
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x + this.r * 0.6, this.y - this.r * 0.3)
+                        cxt.lineTo(this.x + this.r * 0.7,this.y - this.r * 0.7)
+                        cxt.stroke()
+                        // 画分支2
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x + this.r * 0.6, this.y - this.r * 0.3)
+                        cxt.lineTo(this.x + this.r,this.y - this.r * 0.1)
+                        cxt.stroke()
+
+                        
+                        /* 左上主干 */
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x,this.y)
+                        cxt.lineTo(this.x - this.r, this.y - this.r * 0.5)
+                        cxt.stroke()
+                        //画顶端圆
+                        cxt.beginPath()
+                        cxt.arc(this.x - this.r, this.y - this.r * 0.5, this.lineWidth * 1.3, 0, Math.PI * 2, true);
+                        cxt.fill()
+                        // 画分支1
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x - this.r * 0.6, this.y - this.r * 0.3)
+                        cxt.lineTo(this.x - this.r * 0.7,this.y - this.r * 0.8)
+                        cxt.stroke()
+                        // 画分支1
+                        cxt.lineCap = 'round'
+                        cxt.beginPath()
+                        cxt.moveTo(this.x - this.r * 0.6, this.y - this.r * 0.3)
+                        cxt.lineTo(this.x - this.r,this.y - this.r * 0.1)
+                        cxt.stroke()
+                        cxt.closePath();
+
+                        /* 中心补圆 */
+                        cxt.arc(this.x, this.y, this.r * 0.18, 0, Math.PI * 2, false);
+
+                        cxt.fill();
+                        cxt.closePath();
+                        this.update(cxt);
+                    },
+
+                    // 更新位置
+                    update: function (cxt) {
+                        if (this.y < height - this.r) {
+                            this.y += this.vy;
+                        } else {
+                            this.init();
+                        }
+                    },
+                }
+    
+                let snow = [];
+                // let oSnow = new Snow();
+                // oSnow.init();
+                // snow.push(oSnow);
+                // snow[0].draw(oGc);
+
+                // 定时实例化
+                for (var i = 0; i < 500; i++) {
+                    setTimeout(function () {
+                        let oSnow = new Snow();
+                        oSnow.init();
+                        snow.push(oSnow);
+                    }, 1000 * i);
+                }
+    
+                (function move() {
+                    oGc.clearRect(0, 0, width, height);
+                    for (var i = 0; i < snow.length; i++) {
+                        snow[i].draw(oGc);
+                    }
+                    requestAnimationFrame(move);
+                })();
+            }
+        </script>
+    </body>
+</html>
